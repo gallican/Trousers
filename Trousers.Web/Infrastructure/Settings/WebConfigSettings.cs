@@ -1,5 +1,6 @@
 ﻿using System;
 using Trousers.Core;
+using Trousers.Core.Settings;
 
 namespace Trousers.Web.Infrastructure.Settings
 {

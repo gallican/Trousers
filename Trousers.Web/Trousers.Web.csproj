@@ -137,6 +137,7 @@
     <Compile Include="Infrastructure\Settings\WebConfigSettings.cs" />
     <Compile Include="IoC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -206,6 +207,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Interactive.cshtml" />
+    <Content Include="Views\Home\Test.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
@@ -218,6 +220,10 @@
     <ProjectReference Include="..\Trousers.Core\Trousers.Core.csproj">
       <Project>{219CE1AE-B97E-4BC5-832B-3C268C001741}</Project>
       <Name>Trousers.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Trousers.Plugins\Trousers.Plugins.csproj">
+      <Project>{197F6686-EE10-4EF8-B8E3-F39E4D350614}</Project>
+      <Name>Trousers.Plugins</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

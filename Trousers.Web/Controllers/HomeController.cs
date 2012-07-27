@@ -1,9 +1,21 @@
 ﻿using System.Web.Mvc;
+using Autofac;
+using Trousers.Core;
+using Trousers.Core.Responses;
 
 namespace Trousers.Web.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly ILifetimeScope _scope;
+        private readonly IWorkItemHistoryProvider _workItemHistoryProvider;
+
+        public HomeController(ILifetimeScope scope, IWorkItemHistoryProvider workItemHistoryProvider)
+        {
+            _scope = scope;
+            _workItemHistoryProvider = workItemHistoryProvider;
+        }
+
         public ActionResult Index()
         {
             return RedirectToAction("Interactive");
@@ -15,20 +27,25 @@ namespace Trousers.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Search(string expr)
+        public ActionResult Search(string plugin, string expr)
         {
-            if (expr.Contains("json")){
-            var result = new
-            {
-                isJson = true,
-                foo = 1,
-                bar = "two",
-            };
+            _workItemHistoryProvider.SetQuery(expr);
+            var pluginInstance = _scope.ResolveNamed<IPlugin>(plugin);
 
-            return Json(result);
+            var response = pluginInstance.Query();
+            var jsonResponse = response as JsonResponse;
+            if (jsonResponse != null)
+            {
+                return Json(jsonResponse);
             }
 
-            return new ContentResult() { Content = "Hello, world!", ContentType="text/html" };
+            var htmlResponse = (HtmlResponse) response;
+            return new ContentResult {ContentType = "text/html", Content = htmlResponse.Html};
+        }
+
+        public ActionResult Test()
+        {
+            return View();
         }
     }
 }

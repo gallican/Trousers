@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Trousers.Core
+namespace Trousers.Core.Settings
 {
     public interface ISettings
     {

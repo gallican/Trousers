@@ -1,7 +1,6 @@
-﻿using System.Web;
-using System.Web.Optimization;
+﻿using System.Web.Optimization;
 
-namespace Trousers.Web
+namespace Trousers.Web.App_Start
 {
     public class BundleConfig
     {

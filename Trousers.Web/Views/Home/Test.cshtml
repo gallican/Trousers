@@ -1,0 +1,66 @@
+﻿@{
+    ViewBag.Title = "Test Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style type="text/css">
+
+    div.result {
+        min-height: 400px;
+        background-color: lightgray;
+        clear: both;
+    }
+
+</style>
+
+<div id="result" class="metro chunk4 result"></div>
+
+@section scripts{
+
+    <script type="text/javascript">
+
+        displayChart = function(chart) {
+            var data = google.visualization.arrayToDataTable(chart.Data);
+            var options = chart.Options;
+
+            var divResult = $("#result");
+            divResult.html('<div id="chart"></div>');
+            var googleChart = new google.visualization.ComboChart($("#chart")[0]);
+            googleChart.draw(data, options);
+        };
+
+        createChart = function () {
+
+            var data = [
+                ["Month", "To Do", "Done", "Overall Story Point Trend", "Done (estimated)"],
+                ["April", 3, 0, 3, 3],
+                ["May", 2, 1, 4, 3],
+                ["June", 2, 2, 5, 4],
+                ["July", null, null, 6, 5],
+                ["August", null, null, 6.5, 6],
+                ["September", null, null, 7, 7],
+                ["October", null, null, 7, 8]
+            ];
+
+            var options = { };
+            // munge some property names here for now
+            options.hAxis = options.HorizontalAxis;
+            options.seriesType = "area";
+            options.isStacked = true;
+            options.series = {
+                0: { color: "orange", type: "area" },
+                1: { color: "green", type: "area" },
+                2: { color: "red", type: "line" },
+                3: { color: "green", type: "line" }
+            };
+
+            var chart = { Data: data, Options: options };
+            return chart;
+        };
+
+        $(document).ready(function() {
+            displayChart(createChart());
+        });
+    </script>
+
+
+}

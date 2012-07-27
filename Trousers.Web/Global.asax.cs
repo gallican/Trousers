@@ -4,6 +4,7 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using Autofac;
 using Autofac.Integration.Mvc;
+using Trousers.Web.App_Start;
 
 namespace Trousers.Web
 {
