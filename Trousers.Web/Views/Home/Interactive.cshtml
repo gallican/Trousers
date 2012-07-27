@@ -1,0 +1,108 @@
+﻿@{
+    ViewBag.Title = "Trousers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style type="text/css">
+    body
+    {
+        background-color: white;
+        font-size: 24pt;
+    }
+
+    #content
+    {
+        width: 900px;
+        margin: 0 auto 0 auto;
+    }
+
+    div.metro
+    {
+        float: left;
+        height: 170px;
+        display: inline-block;
+        margin: 10px;
+        padding: 20px;
+    }
+
+    div.chunk1
+    {
+        width: 170px;
+        background-color: purple;
+        color: white;
+    }
+
+    div.chunk3
+    {
+        width: 570px;
+        background-color: DarkOrange;
+        color: white;
+    }
+
+    div.chunk4
+    {
+        clear: both;
+        width: 800px;
+    }
+
+    div.result
+    {
+        min-height: 400px;
+        background-color: lightgray;
+        clear: both;
+    }
+
+    input
+    {
+        margin: 10px;
+        padding: 10px;
+        font-size: 24pt;
+    }
+
+    div.chunk3 input
+    {
+        width: 530px;
+    }
+</style>
+
+<div class="metro chunk1">
+    trousers<br />
+
+    <div style="font-size: 18pt; font-style: italic; margin-top: 18pt;">
+        a faster way to get into tfs
+    </div>
+
+</div>
+
+<div class="metro chunk3">
+    <form name="form" id="form">
+    <input type="text" name="expr" id="expr" title="Type a search expression here" placeholder="Type a search expression here" />
+    </form>
+</div>
+
+<div id="result" class="metro chunk4 result"></div>
+
+@section scripts{
+    <script type="text/javascript">
+        onSuccess = function (result, context, someOtherStuff) {
+            if (result.isChart) {
+                debugger;
+                return;
+            }
+
+            $("#result").html(result);
+        };
+
+        onInput = function (e) {
+            var data = $("#form").serialize();
+            $.post("/Home/Search", data, onSuccess);
+        };
+
+        $(document).ready(function () {
+            $("#expr")
+                .bind("input", onInput)
+                .focus();
+        });
+    </script>
+
+
+}
