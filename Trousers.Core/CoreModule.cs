@@ -1,5 +1,7 @@
 ﻿using Autofac;
 using Trousers.Core.DevelopmentStubs;
+using Trousers.Core.Domain.Repositories;
+using Trousers.Core.Infrastructure;
 
 namespace Trousers.Core
 {

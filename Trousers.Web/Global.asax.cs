@@ -4,7 +4,7 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using Autofac;
 using Autofac.Integration.Mvc;
-using Trousers.Core.Events;
+using Trousers.Core.Domain.Events;
 using Trousers.Web.App_Start;
 
 namespace Trousers.Web

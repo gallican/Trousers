@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Autofac;
 using Trousers.Core;
+using Trousers.Core.Infrastructure;
 
 namespace Trousers.Plugins
 {

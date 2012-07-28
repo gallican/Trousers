@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading;
 using Autofac;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
-using Trousers.Core.Events;
+using Trousers.Core.Domain.Events;
 using Trousers.Core.Extensions;
 
 namespace Trousers.Data.Tfs

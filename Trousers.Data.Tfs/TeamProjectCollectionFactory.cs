@@ -1,5 +1,5 @@
 using Microsoft.TeamFoundation.Client;
-using Trousers.Core.Settings;
+using Trousers.Core.Infrastructure.Settings;
 
 namespace Trousers.Data.Tfs
 {

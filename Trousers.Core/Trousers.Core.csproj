@@ -47,33 +47,34 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AllWorkItemsQuery.cs" />
+    <Compile Include="Domain\Queries\AllWorkItemsQuery.cs" />
     <Compile Include="CoreModule.cs" />
-    <Compile Include="Dtos\WorkItemDto.cs" />
-    <Compile Include="Events\DomainEvents.cs" />
-    <Compile Include="Events\IDomainEvent.cs" />
-    <Compile Include="Events\IEventBroker.cs" />
-    <Compile Include="Events\IHandleEvent.cs" />
+    <Compile Include="Domain\Entities\WorkItemEntity.cs" />
+    <Compile Include="Domain\Events\DomainEvents.cs" />
+    <Compile Include="Domain\Events\IDomainEvent.cs" />
+    <Compile Include="Domain\Events\IEventBroker.cs" />
+    <Compile Include="Domain\Events\IHandleEvent.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
-    <Compile Include="IFilterExpressionProvider.cs" />
-    <Compile Include="IIdentifiable.cs" />
-    <Compile Include="IRepository.cs" />
-    <Compile Include="IWorkItemHistoryProvider.cs" />
-    <Compile Include="IWorkItemProvider.cs" />
-    <Compile Include="MemoryRepository.cs" />
-    <Compile Include="Query.cs" />
-    <Compile Include="RegexFactory.cs" />
+    <Compile Include="Infrastructure\IFilterExpressionProvider.cs" />
+    <Compile Include="Domain\Entities\IIdentifiable.cs" />
+    <Compile Include="Domain\Repositories\IRepository.cs" />
+    <Compile Include="Infrastructure\IWorkItemHistoryProvider.cs" />
+    <Compile Include="Infrastructure\IWorkItemProvider.cs" />
+    <Compile Include="Domain\Repositories\MemoryRepository.cs" />
+    <Compile Include="Domain\Queries\Query.cs" />
+    <Compile Include="Extensions\RegexFactory.cs" />
     <Compile Include="Responses\ChartResponse.cs" />
     <Compile Include="Responses\JsonResponse.cs" />
     <Compile Include="Responses\HtmlResponse.cs" />
-    <Compile Include="IPlugin.cs" />
-    <Compile Include="Settings\ISettings.cs" />
+    <Compile Include="Infrastructure\IPlugin.cs" />
+    <Compile Include="Responses\SearchResult.cs" />
+    <Compile Include="Infrastructure\Settings\ISettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Responses\Response.cs" />
-    <Compile Include="FilterExpressionQuery.cs" />
-    <Compile Include="WorkItemHistory.cs" />
+    <Compile Include="Domain\Queries\FilterExpressionQuery.cs" />
+    <Compile Include="Infrastructure\WorkItemHistory.cs" />
     <Compile Include="DevelopmentStubs\WorkItemHistoryProvider.cs" />
-    <Compile Include="WorkItemsProvider.cs" />
+    <Compile Include="Infrastructure\WorkItemsProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

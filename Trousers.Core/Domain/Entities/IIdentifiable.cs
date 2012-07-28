@@ -1,4 +1,4 @@
-namespace Trousers.Core
+namespace Trousers.Core.Domain.Entities
 {
     public interface IIdentifiable
     {

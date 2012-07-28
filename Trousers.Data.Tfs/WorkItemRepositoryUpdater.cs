@@ -2,17 +2,18 @@
 using System.Linq;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
 using Trousers.Core;
-using Trousers.Core.Dtos;
-using Trousers.Core.Events;
+using Trousers.Core.Domain.Entities;
+using Trousers.Core.Domain.Events;
+using Trousers.Core.Domain.Repositories;
 using Trousers.Core.Extensions;
 
 namespace Trousers.Data.Tfs
 {
     public class WorkItemRepositoryUpdater : IHandleEvent<WorkItemsUpdatedEvent>
     {
-        private readonly IRepository<WorkItemDto> _repository;
+        private readonly IRepository<WorkItemEntity> _repository;
 
-        public WorkItemRepositoryUpdater(IRepository<WorkItemDto> repository)
+        public WorkItemRepositoryUpdater(IRepository<WorkItemEntity> repository)
         {
             _repository = repository;
         }
@@ -25,7 +26,7 @@ namespace Trousers.Data.Tfs
                 .Done();
         }
 
-        private static WorkItemDto ToDto(WorkItem wi)
+        private static WorkItemEntity ToDto(WorkItem wi)
         {
             var fields = new Dictionary<string, string>();
 
@@ -40,7 +41,7 @@ namespace Trousers.Data.Tfs
                 fields[field.Name] = fieldValue;
             }
 
-            return new WorkItemDto(wi.Id, wi.ChangedDate, fields);
+            return new WorkItemEntity(wi.Id, wi.ChangedDate, fields);
         }
     }
 }

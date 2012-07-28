@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Autofac;
-using Trousers.Core.Events;
+using Trousers.Core.Domain.Events;
 
 namespace Trousers.Web.Infrastructure
 {

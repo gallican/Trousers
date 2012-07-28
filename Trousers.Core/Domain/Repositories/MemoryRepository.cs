@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using Trousers.Core.Domain.Entities;
+using Trousers.Core.Domain.Queries;
 
-namespace Trousers.Core
+namespace Trousers.Core.Domain.Repositories
 {
     public class MemoryRepository<T> : IRepository<T> where T : class, IIdentifiable
     {

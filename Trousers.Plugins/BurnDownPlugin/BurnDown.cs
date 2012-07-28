@@ -1,4 +1,5 @@
 ﻿using Trousers.Core;
+using Trousers.Core.Infrastructure;
 using Trousers.Core.Responses;
 
 namespace Trousers.Plugins.BurnDownPlugin

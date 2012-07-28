@@ -1,5 +1,5 @@
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
-using Trousers.Core.Events;
+using Trousers.Core.Domain.Events;
 
 namespace Trousers.Data.Tfs
 {

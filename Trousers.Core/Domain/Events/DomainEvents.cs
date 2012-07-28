@@ -1,4 +1,4 @@
-﻿namespace Trousers.Core.Events
+﻿namespace Trousers.Core.Domain.Events
 {
     public static class DomainEvents
     {

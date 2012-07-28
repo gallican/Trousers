@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Trousers.Core.Dtos;
+using Trousers.Core.Domain.Entities;
+using Trousers.Core.Extensions;
 
-namespace Trousers.Core
+namespace Trousers.Core.Domain.Queries
 {
-    public class FilterExpressionQuery : Query<WorkItemDto>
+    public class FilterExpressionQuery : Query<WorkItemEntity>
     {
         private const string _tokenSplitRegex = "(\".*\")|((\\w|[\\S^\"])*( |$))";
 
@@ -16,7 +17,7 @@ namespace Trousers.Core
             _expr = expr;
         }
 
-        public override IEnumerable<WorkItemDto> Execute(IQueryable<WorkItemDto> source)
+        public override IEnumerable<WorkItemEntity> Execute(IQueryable<WorkItemEntity> source)
         {
             if (string.IsNullOrWhiteSpace(_expr)) return source;
 
@@ -38,7 +39,7 @@ namespace Trousers.Core
                 .Select(token => token.Value.Trim(' ', '"'));
         }
 
-        private static bool TokensMatch(WorkItemDto wi, IEnumerable<string> tokens)
+        private static bool TokensMatch(WorkItemEntity wi, IEnumerable<string> tokens)
         {
             // each token must exist in at least one of the searchable fields
             foreach (var token in tokens)

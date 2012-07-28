@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using Autofac;
 using Trousers.Core;
+using Trousers.Core.Infrastructure;
 using Trousers.Core.Responses;
 using Trousers.Web.Models.Home;
 

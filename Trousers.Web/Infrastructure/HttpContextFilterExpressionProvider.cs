@@ -1,5 +1,6 @@
 ﻿using System.Web;
 using Trousers.Core;
+using Trousers.Core.Infrastructure;
 
 namespace Trousers.Web.Infrastructure
 {
