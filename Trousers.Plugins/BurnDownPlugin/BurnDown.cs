@@ -1,7 +1,7 @@
 ﻿using Trousers.Core;
 using Trousers.Core.Responses;
 
-namespace Trousers.Plugins.BurnDownChart
+namespace Trousers.Plugins.BurnDownPlugin
 {
     public class BurnDown : IPlugin
     {

@@ -1,13 +1,24 @@
-﻿@{
+﻿@model Trousers.Web.Models.Home.InteractiveModel
+@{
     ViewBag.Title = "Trousers";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <style type="text/css">
+    body
+    {
+        overflow-y: scroll;
+    }
+    
     div.result
     {
         min-height: 400px;
         background-color: lightgray;
         clear: both;
+    }
+
+    span.searchAction
+    {
+        cursor: pointer;
     }
 </style>
 
@@ -21,10 +32,21 @@
 </div>
 
 <div class="metro chunk3">
-    <form name="form" id="form">
-        <input type="hidden" id="plugin" name="plugin" value="BurnDown" />
+
+    <div>
+        <form name="form" id="form">
+        <input type="hidden" id="searchAction" name="searchAction" value="BurnDown" />
         <input type="text" name="expr" id="expr" title="Type a search expression here" placeholder="Type a search expression here" />
-    </form>
+        </form>
+    </div>
+
+    <div>
+        @foreach (var searchAction in Model.SearchActions)
+        {
+            <span class="searchAction">@searchAction</span>
+        }
+    </div>
+
 </div>
 
 <div id="result" class="metro chunk4 result"></div>
@@ -55,15 +77,25 @@
             displayHtml(result);
         };
 
-        onInput = function (e) {
+        doSearch = function () {
             var data = $("#form").serialize();
             $.post("/Home/Search", data, onSuccess);
         };
 
+        onInput = function (e) {
+            doSearch();
+        };
+
         $(document).ready(function () {
+
             $("#expr")
                 .bind("input", onInput)
                 .focus();
+
+            $("span.searchAction").live("click", function (e) {
+                $("#searchAction").val($(this).text());
+                doSearch();
+            });
         });
     </script>
 }

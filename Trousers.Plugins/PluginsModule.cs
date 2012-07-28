@@ -22,6 +22,7 @@ namespace Trousers.Plugins
             foreach (var type in pluginTypes)
             {
                 builder.RegisterType(type)
+                    .AsImplementedInterfaces()
                     .Named<IPlugin>(type.Name);
             }
         }

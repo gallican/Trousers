@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AllWorkItemsQuery.cs" />
     <Compile Include="CoreModule.cs" />
     <Compile Include="Dtos\WorkItemDto.cs" />
     <Compile Include="Events\DomainEvents.cs" />
@@ -57,6 +58,7 @@
     <Compile Include="IIdentifiable.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="IWorkItemHistoryProvider.cs" />
+    <Compile Include="IWorkItemProvider.cs" />
     <Compile Include="MemoryRepository.cs" />
     <Compile Include="Query.cs" />
     <Compile Include="Responses\ChartResponse.cs" />
@@ -68,6 +70,7 @@
     <Compile Include="Responses\Response.cs" />
     <Compile Include="WorkItemHistory.cs" />
     <Compile Include="DevelopmentStubs\WorkItemHistoryProvider.cs" />
+    <Compile Include="WorkItemsProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
