@@ -2,15 +2,13 @@
 {
     public class ChartResponse : JsonResponse
     {
-        private readonly object _content;
+        private readonly object[][] _data;
+        private readonly object _options;
 
         public ChartResponse(object[][] data, object options)
         {
-            _content = new
-            {
-                data,
-                options,
-            };
+            _data = data;
+            _options = options;
         }
 
         public bool IsChart
@@ -18,9 +16,14 @@
             get { return true; }
         }
 
-        public override object Content
+        public object[][] Data
         {
-            get { return _content; }
+            get { return _data; }
+        }
+
+        public object Options
+        {
+            get { return _options; }
         }
     }
 }

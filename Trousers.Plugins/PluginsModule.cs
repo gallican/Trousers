@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Autofac;
-using Trousers.Core;
 using Trousers.Core.Infrastructure;
+using Trousers.Plugins.SearchPlugin;
 
 namespace Trousers.Plugins
 {
@@ -12,6 +12,10 @@ namespace Trousers.Plugins
             base.Load(builder);
 
             RegisterPluginTypes(builder);
+
+            builder.RegisterType<SearchDisplayMetadataProvider>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
 
         private static void RegisterPluginTypes(ContainerBuilder builder)

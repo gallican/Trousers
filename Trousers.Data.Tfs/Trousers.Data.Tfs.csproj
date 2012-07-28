@@ -50,12 +50,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TeamProjectCollectionFactory.cs" />
+    <Compile Include="Infrastructure\TeamProjectCollectionFactory.cs" />
     <Compile Include="TfsModule.cs" />
-    <Compile Include="WorkItemFetcher.cs" />
-    <Compile Include="WorkItemRepositoryUpdater.cs" />
-    <Compile Include="WorkItemStoreFactory.cs" />
-    <Compile Include="WorkItemsUpdatedEvent.cs" />
+    <Compile Include="Infrastructure\WorkItemFetcher.cs" />
+    <Compile Include="Infrastructure\WorkItemRepositoryUpdater.cs" />
+    <Compile Include="Infrastructure\WorkItemStoreFactory.cs" />
+    <Compile Include="Events\WorkItemsFetchedEvent.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

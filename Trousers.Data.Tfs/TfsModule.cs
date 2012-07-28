@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Trousers.Data.Tfs.Infrastructure;
 
 namespace Trousers.Data.Tfs
 {

@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Trousers.Core;
+using Trousers.Core.Dtos;
 using Trousers.Core.Infrastructure;
 using Trousers.Core.Responses;
 
@@ -8,20 +8,22 @@ namespace Trousers.Plugins.SearchPlugin
     public class Search : IPlugin
     {
         private readonly IWorkItemProvider _workItemsProvider;
+        private readonly ISearchDisplayMetadataProvider _searchMetadataProvider;
 
-        public Search(IWorkItemProvider workItemsProvider)
+        public Search(IWorkItemProvider workItemsProvider, ISearchDisplayMetadataProvider searchMetadataProvider)
         {
             _workItemsProvider = workItemsProvider;
+            _searchMetadataProvider = searchMetadataProvider;
         }
 
         public Response Query()
         {
-            var strings = _workItemsProvider.WorkItems
-                .Select(wi => string.Format("{0}<br />", wi.Fields["Title"]))
+            var dtos = _workItemsProvider.WorkItems
+                .Select(wi => WorkItemDto.FromEntity(wi))
+                .Take(50)
                 .ToArray();
-            var html = string.Join(string.Empty, strings);
 
-            var response = new HtmlResponse(html);
+            var response = new SearchResponse(_searchMetadataProvider.DisplayFields, _searchMetadataProvider.LongFields, dtos);
             return response;
         }
     }

@@ -35,7 +35,7 @@
 
     <div>
         <form name="form" id="form">
-        <input type="hidden" id="searchAction" name="searchAction" value="BurnDown" />
+        <input type="hidden" id="searchAction" name="searchAction" value="@Model.SearchActions.First()" />
         <input type="text" name="expr" id="expr" title="Type a search expression here" placeholder="Type a search expression here" />
         </form>
     </div>
@@ -49,53 +49,8 @@
 
 </div>
 
-<div id="result" class="metro chunk4 result"></div>
+<div id="result" class="metro chunk4 result" style="font-size: 10pt;"></div>
 
 @section scripts{
-
-    <script type="text/javascript">
-        displayChart = function (chart) {
-            var data = google.visualization.arrayToDataTable(chart.Content.data);
-            var options = chart.Content.options;
-
-            var divResult = $("#result");
-            divResult.html('<div id="chart"></div>');
-            var googleChart = new google.visualization.AreaChart($("#chart")[0]);
-            googleChart.draw(data, options);
-        };
-
-        displayHtml = function (html) {
-            $("#result").html(html);
-        };
-
-        onSuccess = function (result) {
-            if (result.IsChart) {
-                displayChart(result);
-                return;
-            }
-
-            displayHtml(result);
-        };
-
-        doSearch = function () {
-            var data = $("#form").serialize();
-            $.post("/Home/Search", data, onSuccess);
-        };
-
-        onInput = function (e) {
-            doSearch();
-        };
-
-        $(document).ready(function () {
-
-            $("#expr")
-                .bind("input", onInput)
-                .focus();
-
-            $("span.searchAction").live("click", function (e) {
-                $("#searchAction").val($(this).text());
-                doSearch();
-            });
-        });
-    </script>
+    <script type="text/javascript" src="~/Scripts/Home/Interactive.js"></script>
 }

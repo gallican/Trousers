@@ -7,8 +7,9 @@ using Autofac;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
 using Trousers.Core.Domain.Events;
 using Trousers.Core.Extensions;
+using Trousers.Data.Tfs.Events;
 
-namespace Trousers.Data.Tfs
+namespace Trousers.Data.Tfs.Infrastructure
 {
     public class WorkItemFetcher : IStartable
     {
@@ -46,7 +47,7 @@ namespace Trousers.Data.Tfs
 
                 latest = updatedWorkItems.Last().ChangedDate;
 
-                DomainEvents.Raise(new WorkItemsUpdatedEvent(updatedWorkItems));
+                DomainEvents.Raise(new WorkItemsFetchedEvent(updatedWorkItems));
             }
         }
 

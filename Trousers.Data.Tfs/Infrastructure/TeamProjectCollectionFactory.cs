@@ -1,7 +1,7 @@
 using Microsoft.TeamFoundation.Client;
 using Trousers.Core.Infrastructure.Settings;
 
-namespace Trousers.Data.Tfs
+namespace Trousers.Data.Tfs.Infrastructure
 {
     public class TeamProjectCollectionFactory
     {
