@@ -55,12 +55,14 @@
     <Compile Include="Events\IEventBroker.cs" />
     <Compile Include="Events\IHandleEvent.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
+    <Compile Include="IFilterExpressionProvider.cs" />
     <Compile Include="IIdentifiable.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="IWorkItemHistoryProvider.cs" />
     <Compile Include="IWorkItemProvider.cs" />
     <Compile Include="MemoryRepository.cs" />
     <Compile Include="Query.cs" />
+    <Compile Include="RegexFactory.cs" />
     <Compile Include="Responses\ChartResponse.cs" />
     <Compile Include="Responses\JsonResponse.cs" />
     <Compile Include="Responses\HtmlResponse.cs" />
@@ -68,6 +70,7 @@
     <Compile Include="Settings\ISettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Responses\Response.cs" />
+    <Compile Include="FilterExpressionQuery.cs" />
     <Compile Include="WorkItemHistory.cs" />
     <Compile Include="DevelopmentStubs\WorkItemHistoryProvider.cs" />
     <Compile Include="WorkItemsProvider.cs" />

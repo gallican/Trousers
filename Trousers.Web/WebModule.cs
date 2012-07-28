@@ -20,6 +20,10 @@ namespace Trousers.Web
             builder.RegisterType<AutofacEventBroker>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+            builder.RegisterType<HttpContextFilterExpressionProvider>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
     }
 }

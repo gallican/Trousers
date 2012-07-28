@@ -36,12 +36,8 @@ namespace Trousers.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Search(string searchAction, string expr)
+        public ActionResult Search(string searchAction)
         {
-            //FIXME ugly hack.  remove.
-            _workItemProvider.SetQuery(expr);
-            _workItemHistoryProvider.SetQuery(expr);
-
             var pluginInstance = _scope.ResolveNamed<IPlugin>(searchAction);
 
             var response = pluginInstance.Query();

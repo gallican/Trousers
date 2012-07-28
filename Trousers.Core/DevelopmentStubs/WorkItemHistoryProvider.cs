@@ -1,19 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace Trousers.Core.DevelopmentStubs
 {
     public class WorkItemHistoryProvider : IWorkItemHistoryProvider
     {
-        private string _expr;
+        private readonly IFilterExpressionProvider _filterExpressionProvider;
         private IQueryable<WorkItemHistory> _workItemHistories;
         private readonly object _mutex = new object();
 
-        public void SetQuery(string expr)
+        public WorkItemHistoryProvider(IFilterExpressionProvider filterExpressionProvider)
         {
-            _expr = expr;
-            EnsureResults();
+            _filterExpressionProvider = filterExpressionProvider;
+            ThreadPool.QueueUserWorkItem(_ => EnsureResults());
         }
 
         private void EnsureResults()
