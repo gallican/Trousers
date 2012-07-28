@@ -134,6 +134,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\AutofacEventBroker.cs" />
     <Compile Include="Infrastructure\Settings\WebConfigSettings.cs" />
     <Compile Include="IoC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -220,6 +221,10 @@
     <ProjectReference Include="..\Trousers.Core\Trousers.Core.csproj">
       <Project>{219CE1AE-B97E-4BC5-832B-3C268C001741}</Project>
       <Name>Trousers.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Trousers.Data.Tfs\Trousers.Data.Tfs.csproj">
+      <Project>{14EAFC14-2A63-40C4-A586-2B5EA86807BA}</Project>
+      <Name>Trousers.Data.Tfs</Name>
     </ProjectReference>
     <ProjectReference Include="..\Trousers.Plugins\Trousers.Plugins.csproj">
       <Project>{197F6686-EE10-4EF8-B8E3-F39E4D350614}</Project>

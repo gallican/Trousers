@@ -12,6 +12,10 @@ namespace Trousers.Core
             builder.RegisterType<WorkItemHistoryProvider>()
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
+
+            builder.RegisterGeneric(typeof(MemoryRepository<>))
+                .As(typeof(IRepository<>))
+                .SingleInstance();
         }
     }
 }

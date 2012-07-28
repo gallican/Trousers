@@ -48,7 +48,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CoreModule.cs" />
+    <Compile Include="Dtos\WorkItemDto.cs" />
+    <Compile Include="Events\DomainEvents.cs" />
+    <Compile Include="Events\IDomainEvent.cs" />
+    <Compile Include="Events\IEventBroker.cs" />
+    <Compile Include="Events\IHandleEvent.cs" />
+    <Compile Include="Extensions\EnumerableExtensions.cs" />
+    <Compile Include="IIdentifiable.cs" />
+    <Compile Include="IRepository.cs" />
     <Compile Include="IWorkItemHistoryProvider.cs" />
+    <Compile Include="MemoryRepository.cs" />
+    <Compile Include="Query.cs" />
     <Compile Include="Responses\ChartResponse.cs" />
     <Compile Include="Responses\JsonResponse.cs" />
     <Compile Include="Responses\HtmlResponse.cs" />
@@ -62,6 +72,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

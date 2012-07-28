@@ -8,7 +8,7 @@ namespace Trousers.Web.Infrastructure.Settings
     {
         public Uri TfsUri
         {
-            get { return new Uri("http://tfs.localtest.me:8080/tfs/DefaultCollection"); }
+            get { return new Uri("http://win-gs9gmujits8:8080/tfs/DefaultCollection"); }
         }
     }
 }

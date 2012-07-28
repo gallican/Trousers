@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Autofac;
 using Trousers.Core;
+using Trousers.Data.Tfs;
 using Trousers.Plugins;
 using Module = Autofac.Module;
 
@@ -35,6 +36,7 @@ namespace Trousers.Web
         private static IEnumerable<Assembly> ApplicationAssemblies()
         {
             yield return typeof(CoreModule).Assembly;
+            yield return typeof(TfsModule).Assembly;
             yield return typeof(PluginsModule).Assembly;
             yield return typeof(WebModule).Assembly;
         }
