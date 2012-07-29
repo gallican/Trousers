@@ -20,12 +20,23 @@ namespace Trousers.Data.Tfs.Infrastructure
         public void Handle(WorkItemsFetchedEvent domainEvent)
         {
             var entities = domainEvent.WorkItems
-                .Select(ToEntity);
+                .SelectMany(ToEntities)
+                .ToArray()
+                ;
 
             _repository.AddOrUpdate(entities);
         }
 
-        private static WorkItemEntity ToEntity(WorkItem wi)
+        private static IEnumerable<WorkItemEntity> ToEntities(WorkItem wi)
+        {
+            foreach (var oldVersion in wi.Revisions.Cast<Revision>().Select(r => r.WorkItem))
+            {
+                yield return ToEntity(oldVersion, false);
+            }
+            yield return ToEntity(wi, true);
+        }
+
+        private static WorkItemEntity ToEntity(WorkItem wi, bool isCurrent)
         {
             var fields = new Dictionary<string, string>();
 
@@ -40,7 +51,7 @@ namespace Trousers.Data.Tfs.Infrastructure
                 fields[field.Name] = fieldValue;
             }
 
-            return new WorkItemEntity(wi.Id, wi.ChangedDate, fields);
+            return new WorkItemEntity(wi.Id, wi.Revision, wi.ChangedDate, isCurrent, fields);
         }
     }
 }

@@ -29,9 +29,7 @@ namespace Trousers.Core.Domain.Repositories
 
         private void AddOrUpdateInternal(T item)
         {
-            var toRemove = _items.Where(t => t.Id == item.Id).FirstOrDefault();
-            if (toRemove != null) _items.Remove(toRemove);
-
+            _items.Remove(item);
             _items.Add(item);
         }
     }

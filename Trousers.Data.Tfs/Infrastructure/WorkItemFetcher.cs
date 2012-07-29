@@ -36,7 +36,7 @@ namespace Trousers.Data.Tfs.Infrastructure
                 var updatedWorkItems = workItems
                     .Where(wi => wi.ChangedDate > latest)
                     .OrderBy(wi => wi.ChangedDate)
-                    .Take(2)
+                    .Take(20)
                     .ToArray();
 
                 if (updatedWorkItems.None())

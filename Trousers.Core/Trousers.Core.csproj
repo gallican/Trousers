@@ -47,14 +47,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Domain\Entities\IDeactivatable.cs" />
     <Compile Include="Domain\Events\WorkItemsUpdatedEvent.cs" />
-    <Compile Include="Domain\Queries\AllItemsQuery.cs" />
+    <Compile Include="Domain\Queries\AllCurrentItemsQuery.cs" />
     <Compile Include="CoreModule.cs" />
     <Compile Include="Domain\Entities\WorkItemEntity.cs" />
     <Compile Include="Domain\Events\DomainEvents.cs" />
     <Compile Include="Domain\Events\IDomainEvent.cs" />
     <Compile Include="Domain\Events\IEventBroker.cs" />
     <Compile Include="Domain\Events\IHandleEvent.cs" />
+    <Compile Include="Domain\Queries\AllItemsQuery.cs" />
+    <Compile Include="Domain\Queries\FilteredActiveItemsQuery.cs" />
     <Compile Include="Domain\Repositories\RepositoryExtensions.cs" />
     <Compile Include="Dtos\WorkItemDto.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
