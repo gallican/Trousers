@@ -132,12 +132,13 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Infrastructure\HttpContextFilterExpressionProvider.cs" />
+    <Compile Include="Infrastructure\Settings\SettingsBasedCredentials.cs" />
     <Compile Include="Models\Home\InteractiveModel.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\AutofacEventBroker.cs" />
-    <Compile Include="Infrastructure\Settings\WebConfigSettings.cs" />
+    <Compile Include="Infrastructure\Settings\HackyFileSettings.cs" />
     <Compile Include="IoC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebModule.cs" />

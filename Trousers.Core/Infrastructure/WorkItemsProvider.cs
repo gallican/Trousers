@@ -18,7 +18,7 @@ namespace Trousers.Core.Infrastructure
 
         public IQueryable<WorkItemEntity> WorkItems
         {
-            get { return _repository.Query(new FilteredActiveItemsQuery(_filterExpressionProvider.FilterExpression)).AsQueryable(); }
+            get { return _repository.Query(new FilteredActiveItemsQuery(_filterExpressionProvider.FilterExpression)); }
         }
     }
 }

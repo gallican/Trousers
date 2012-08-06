@@ -9,7 +9,7 @@ namespace Trousers.Plugins.SearchPlugin
     {
         private readonly IRepository<WorkItemEntity> _repository;
 
-        private readonly string[] _displayFields = new[] { "ID", "Work Item Type", "Title", "Assigned To", "State", "Reason", "Priority" };
+        private readonly string[] _displayFields = new[] { "ID", "Work Item Type", "Title", "Iteration Path", "Assigned To", "State", "Reason", "Priority" };
         private string[] _longFields = new string[0];
 
         public SearchDisplayMetadataProvider(IRepository<WorkItemEntity> repository)

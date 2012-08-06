@@ -27,7 +27,20 @@ namespace Trousers.Core.Extensions
 
         public static void Done<T>(this IEnumerable<T> items)
         {
-            items.ToArray();
+            // ReSharper disable ReturnValueOfPureMethodIsNotUsed
+            // just doing this to force an enumeration
+            items.LastOrDefault();
+            // ReSharper restore ReturnValueOfPureMethodIsNotUsed
+        }
+
+        public static IEnumerable<T> Range<T>(T start, T end, Func<T, T> increment) where T : IComparable
+        {
+            var current = start;
+            while (current.CompareTo(end) < 0)
+            {
+                yield return current;
+                current = increment(current);
+            }
         }
     }
 }

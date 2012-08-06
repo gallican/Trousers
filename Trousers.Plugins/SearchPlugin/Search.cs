@@ -20,7 +20,7 @@ namespace Trousers.Plugins.SearchPlugin
         {
             var dtos = _workItemsProvider.WorkItems
                 .Select(wi => WorkItemDto.FromEntity(wi))
-                .Take(50)
+                .Take(201)
                 .ToArray();
 
             var response = new SearchResponse(_searchMetadataProvider.DisplayFields, _searchMetadataProvider.LongFields, dtos);

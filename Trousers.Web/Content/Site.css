@@ -13,14 +13,14 @@ body
 
 #content
 {
-    width: 900px;
+    width: 960px;
     margin: 0 auto 0 auto;
 }
 
 div.metro
 {
     float: left;
-    height: 170px;
+    height: 190px;
     display: inline-block;
     margin: 10px;
     padding: 20px;
@@ -28,14 +28,14 @@ div.metro
 
 div.chunk1
 {
-    width: 170px;
+    width: 190px;
     background-color: purple;
     color: white;
 }
 
 div.chunk3
 {
-    width: 570px;
+    width: 650px;
     background-color: DarkOrange;
     color: white;
 }
@@ -43,7 +43,7 @@ div.chunk3
 div.chunk4
 {
     clear: both;
-    width: 800px;
+    width: 900px;
 }
 
 input

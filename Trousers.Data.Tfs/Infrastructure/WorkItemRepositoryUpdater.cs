@@ -4,6 +4,7 @@ using Microsoft.TeamFoundation.WorkItemTracking.Client;
 using Trousers.Core.Domain.Entities;
 using Trousers.Core.Domain.Events;
 using Trousers.Core.Domain.Repositories;
+using Trousers.Core.Extensions;
 using Trousers.Data.Tfs.Events;
 
 namespace Trousers.Data.Tfs.Infrastructure
@@ -19,12 +20,9 @@ namespace Trousers.Data.Tfs.Infrastructure
 
         public void Handle(WorkItemsFetchedEvent domainEvent)
         {
-            var entities = domainEvent.WorkItems
-                .SelectMany(ToEntities)
-                .ToArray()
-                ;
-
-            _repository.AddOrUpdate(entities);
+            domainEvent.WorkItems
+                .Do(wi => _repository.AddOrUpdate(ToEntities(wi)))
+                .Done();
         }
 
         private static IEnumerable<WorkItemEntity> ToEntities(WorkItem wi)

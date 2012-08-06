@@ -17,7 +17,7 @@ namespace Trousers.Core.Domain.Queries
             _expr = expr;
         }
 
-        public override IEnumerable<WorkItemEntity> Execute(IQueryable<WorkItemEntity> source)
+        public override IQueryable<WorkItemEntity> Execute(IQueryable<WorkItemEntity> source)
         {
             if (string.IsNullOrWhiteSpace(_expr)) return source;
 
@@ -26,6 +26,7 @@ namespace Trousers.Core.Domain.Queries
                 .AsParallel()
                 .AsOrdered()
                 .Where(wi => TokensMatch(wi, tokens))
+                .AsQueryable()
                 ;
         }
 

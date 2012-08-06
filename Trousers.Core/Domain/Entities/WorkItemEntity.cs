@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Trousers.Core.Domain.Entities
 {
-    public class WorkItemEntity : IIdentifiable, IDeactivatable
+    [DebuggerDisplay("{Id} {Revision} {LastModified}")]
+    [Serializable]
+    public class WorkItemEntity : IIdentifiable, IDeactivatable, IVersionable
     {
         private readonly int _id;
         private readonly int _revision;

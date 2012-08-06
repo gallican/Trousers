@@ -13,7 +13,11 @@ namespace Trousers.Web
 
             builder.RegisterControllers(typeof(WebModule).Assembly);
 
-            builder.RegisterType<WebConfigSettings>()
+            builder.RegisterType<HackyFileSettings>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<SettingsBasedCredentials>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
 

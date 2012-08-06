@@ -78,6 +78,8 @@ $(document).ready(function () {
     });
 
     $(".mainRow").live("click", onMainRowClick);
+
+    doSearch();
 });
 
 

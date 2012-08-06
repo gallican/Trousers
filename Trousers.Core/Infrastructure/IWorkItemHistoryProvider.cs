@@ -1,9 +1,10 @@
 using System.Linq;
+using Trousers.Core.Domain.Entities;
 
 namespace Trousers.Core.Infrastructure
 {
     public interface IWorkItemHistoryProvider
     {
-        IQueryable<WorkItemHistory> WorkItemHistories { get; }
+        IQueryable<WorkItemEntity> WorkItemHistories { get; }
     }
 }

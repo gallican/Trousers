@@ -5,7 +5,10 @@ using System.Linq;
 using System.Threading;
 using Autofac;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
+using Trousers.Core.Domain.Entities;
 using Trousers.Core.Domain.Events;
+using Trousers.Core.Domain.Queries;
+using Trousers.Core.Domain.Repositories;
 using Trousers.Core.Extensions;
 using Trousers.Data.Tfs.Events;
 
@@ -14,10 +17,12 @@ namespace Trousers.Data.Tfs.Infrastructure
     public class WorkItemFetcher : IStartable
     {
         private readonly WorkItemStore _workItemStore;
+        private readonly IRepository<WorkItemEntity> _repository;
 
-        public WorkItemFetcher(WorkItemStore workItemStore)
+        public WorkItemFetcher(WorkItemStore workItemStore, IRepository<WorkItemEntity> repository )
         {
             _workItemStore = workItemStore;
+            _repository = repository;
         }
 
         public void Start()
@@ -27,7 +32,11 @@ namespace Trousers.Data.Tfs.Infrastructure
 
         private void FetchWorkItems()
         {
-            var latest = SqlDateTime.MinValue.Value.AddDays(1);
+            var latestWorkItem = _repository.Query(new LatestWorkItemQuery()).FirstOrDefault();
+
+            var latest = latestWorkItem != null
+                ? latestWorkItem.LastModified
+                : SqlDateTime.MinValue.Value.AddDays(1);
 
             while (true)
             {
@@ -36,12 +45,11 @@ namespace Trousers.Data.Tfs.Infrastructure
                 var updatedWorkItems = workItems
                     .Where(wi => wi.ChangedDate > latest)
                     .OrderBy(wi => wi.ChangedDate)
-                    .Take(20)
                     .ToArray();
 
                 if (updatedWorkItems.None())
                 {
-                    Thread.Sleep(30 * 1000);
+                    Thread.Sleep(10 * 60 * 1000);
                     continue;
                 }
 
