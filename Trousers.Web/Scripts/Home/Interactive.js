@@ -2,8 +2,16 @@
 (function(window, document, trousers, undefined) {
 
     var self = {
+        _sequenceNumber: 0,
+        _searchTimeout: null,
+
         onInput: function(e) {
-            self.doSearch();
+            self.queueSearch();
+        },
+
+        queueSearch: function () {
+            window.clearTimeout(self._searchTimeout);
+            self._searchTimeout = window.setTimeout(self.doSearch, 400);
         },
 
         doSearch: function() {
@@ -14,7 +22,10 @@
 
         onSuccess: function(response) {
             $("#expr").focus();
-            trousers.handleResponse(response, $("#result"));
+            if (response.SequenceNumber > self._sequenceNumber) {
+                self._sequenceNumber = response.SequenceNumber;
+                trousers.handleResponse(response, $("#result"));
+            }
         },
     };
 
@@ -27,10 +38,10 @@
 
         $("span.searchAction").live("click", function(e) {
             $("#searchAction").val($(this).text());
-            self.doSearch();
+            self.queueSearch();
         });
 
-        self.doSearch();
+        self.queueSearch();
     });
 
 })(window, document, window.trousers);

@@ -6,5 +6,7 @@ namespace Trousers.Core.Responses
         {
             get { return GetType().Name; }
         }
+
+        public long SequenceNumber { get; set; }
     }
 }

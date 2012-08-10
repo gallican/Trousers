@@ -30,7 +30,7 @@
         },
 
         onMainRowClick: function(event) {
-            toggleDetailsDisplay($(event.target).closest(".mainRow"));
+            self.toggleDetailsDisplay($(event.target).closest(".mainRow"));
             event.stopPropagation();
             return false;
         },

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Web.Mvc;
 using Autofac;
 using Trousers.Core.Infrastructure;
@@ -11,6 +12,7 @@ namespace Trousers.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILifetimeScope _scope;
+        private static long _searchSequenceNumber = 1;
 
         public HomeController(ILifetimeScope scope)
         {
@@ -33,12 +35,15 @@ namespace Trousers.Web.Controllers
         [HttpPost]
         public ActionResult Search(string searchAction)
         {
+            var searchSequenceNumber = Interlocked.Increment(ref _searchSequenceNumber);
+
             var pluginInstance = _scope.ResolveNamed<IPlugin>(searchAction);
 
             var response = pluginInstance.Query();
             var jsonResponse = response as JsonResponse;
             if (jsonResponse != null)
             {
+                response.SequenceNumber = searchSequenceNumber;
                 return Json(jsonResponse);
             }
 
