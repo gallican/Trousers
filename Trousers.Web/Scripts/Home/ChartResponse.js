@@ -7,6 +7,8 @@
         displayResponse: function (response, targetElement) {
             var data = self.google.visualization.arrayToDataTable(response.Data);
             var options = response.Options;
+            options.width = "100%";
+            options.height = 480;
 
             var divResult = $(targetElement);
             divResult.html('<div id="chart"></div>');

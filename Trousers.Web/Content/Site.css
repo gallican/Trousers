@@ -13,7 +13,7 @@ body
 
 #content
 {
-    width: 960px;
+    width: 1280px;
     margin: 0 auto 0 auto;
 }
 
@@ -28,14 +28,14 @@ div.metro
 
 div.chunk1
 {
-    width: 190px;
+    width: 240px;
     background-color: purple;
     color: white;
 }
 
 div.chunk3
 {
-    width: 650px;
+    width: 920px;
     background-color: DarkOrange;
     color: white;
 }
@@ -43,7 +43,7 @@ div.chunk3
 div.chunk4
 {
     clear: both;
-    width: 900px;
+    width: 1240px;
 }
 
 input
