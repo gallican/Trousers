@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Autofac;
-using Trousers.Core;
 using Trousers.Core.Infrastructure;
 using Trousers.Core.Responses;
 using Trousers.Web.Models.Home;
@@ -13,14 +11,10 @@ namespace Trousers.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILifetimeScope _scope;
-        private readonly IWorkItemProvider _workItemProvider;
-        private readonly IWorkItemHistoryProvider _workItemHistoryProvider;
 
-        public HomeController(ILifetimeScope scope, IWorkItemProvider workItemProvider, IWorkItemHistoryProvider workItemHistoryProvider)
+        public HomeController(ILifetimeScope scope)
         {
             _scope = scope;
-            _workItemProvider = workItemProvider;
-            _workItemHistoryProvider = workItemHistoryProvider;
         }
 
         public ActionResult Index()
