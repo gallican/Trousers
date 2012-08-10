@@ -32,27 +32,67 @@ namespace Trousers.Plugins.BurnDownPlugin
         {
             var workItemRevisions = _workItemHistoryProvider.WorkItemHistories.ToList();
 
-            var projectedWorkCompletedGradient = ProjectedWorkCompletedGradient(workItemRevisions);
-            var projectedWorkGradient = ProjectedWorkGradient(workItemRevisions);
-
             var earliestDate = workItemRevisions.Min(wi => wi.LastModified).Date.AddDays(1);
             var latestDate = workItemRevisions.Max(wi => wi.LastModified).Date.AddDays(1);
             var totalDays = latestDate.Subtract(earliestDate).TotalDays;
             var projectedDate = latestDate.AddDays(totalDays / 4);
 
-            var dataPoints = EnumerableExtensions.Range(earliestDate, projectedDate, d => d.AddDays(7))
+            var dataPoints = EnumerableExtensions.Range(earliestDate, latestDate, d => d.AddDays(7))
                 .AsParallel()
                 .AsOrdered()
-                .Select(date => GenerateGraphData(workItemRevisions, latestDate, projectedWorkGradient, projectedWorkCompletedGradient, date))
-                .ToArray();
+                .Select(date => GenerateActualData(workItemRevisions, date))
+                .ToList();
+
+            var projectedWorkCompletedGradient = ProjectedWorkCompletedGradient(workItemRevisions);
+            var projectedWorkGradient = ProjectedWorkGradient(workItemRevisions);
+            Extrapolate(dataPoints, projectedWorkGradient, projectedWorkCompletedGradient, projectedDate, d => d.AddDays(7));
 
             var data = new List<object[]>();
-            data.Add(new object[] {"Month", "Completed Work", "Total Work", "Completed Work (est)", "Total Work (est)"});
-            data.AddRange(dataPoints);
-
+            data.Add(new object[] { "Month", "Completed Work", "Total Work", "Completed Work (est)", "Total Work (est)" });
+            data.AddRange(dataPoints.Select(dp => new object[] { dp.Date.ToShortDateString(), dp.CumulativeWorkCompleted, dp.CumulativeWork, dp.ProjectedWorkCompleted, dp.ProjectedWork }));
             var options = BuildChartOptions();
-
             return new ChartResponse(data.ToArray(), options);
+        }
+
+        private DataPoint GenerateActualData(IEnumerable<WorkItemEntity> workItemRevisions, DateTime date)
+        {
+            var allWorkItemsToDate = workItemRevisions.Where(wi => wi.LastModified <= date);
+            var latestRevisions = LatestRevisions(allWorkItemsToDate).ToArray();
+
+            var cumulativeWork = CumulativeWork(latestRevisions);
+            var cumulativeWorkCompleted = CumulativeWorkCompleted(latestRevisions);
+
+            var dataPoint = new DataPoint { Date = date, CumulativeWorkCompleted = cumulativeWorkCompleted, CumulativeWork = cumulativeWork };
+            return dataPoint;
+        }
+
+        private static void Extrapolate(ICollection<DataPoint> dataPoints, decimal projectedWorkGradient, decimal projectedWorkCompletedGradient, DateTime projectedDate, Func<DateTime, DateTime> increment)
+        {
+            var lastActualDataPoint = dataPoints.OrderByDescending(dp => dp.Date).First();
+
+            var projectionPeriod = 0;
+            for (var date = lastActualDataPoint.Date; date <= projectedDate; date = increment(date))
+            {
+                var projectedWork = lastActualDataPoint.CumulativeWork + (lastActualDataPoint.CumulativeWork * (projectedWorkGradient * projectionPeriod));
+                var projectedWorkCompleted = lastActualDataPoint.CumulativeWorkCompleted + (lastActualDataPoint.CumulativeWorkCompleted * (projectedWorkCompletedGradient * projectionPeriod));
+
+                var dataPoint = dataPoints
+                    .Where(dp => dp.Date == date)
+                    .FirstOrDefault();
+
+                if (dataPoint != null)
+                {
+                    dataPoint.ProjectedWork = projectedWork;
+                    dataPoint.ProjectedWorkCompleted = projectedWorkCompleted;
+                }
+                else
+                {
+                    dataPoint = new DataPoint { Date = date, ProjectedWork = projectedWork, ProjectedWorkCompleted = projectedWorkCompleted };
+                    dataPoints.Add(dataPoint);
+                }
+
+                projectionPeriod++;
+            }
         }
 
         private decimal ProjectedWorkGradient(List<WorkItemEntity> workItemRevisions)
@@ -61,12 +101,12 @@ namespace Trousers.Plugins.BurnDownPlugin
             var earliestDate = workItemRevisions.Min(wi => wi.LastModified).Date.AddDays(1);
             var latestDate = workItemRevisions.Max(wi => wi.LastModified).Date.AddDays(1);
             var numDays = latestDate.Subtract(earliestDate).TotalDays;
-            var numPeriods = (decimal) numDays/7; //FIXME constant
-            var halfWay = earliestDate.AddDays(numDays/2);
+            var numPeriods = (decimal)numDays / 7; //FIXME constant
+            var halfWay = earliestDate.AddDays(numDays / 2);
 
             var firstHalfWork = CumulativeWork(workItemRevisions.Where(wi => wi.LastModified <= halfWay));
             var totalWork = CumulativeWork(workItemRevisions);
-            var gradient = ((totalWork/firstHalfWork) - 1)/numPeriods;
+            var gradient = ((totalWork / firstHalfWork) - 1) / numPeriods;
 
             return gradient;
         }
@@ -77,12 +117,12 @@ namespace Trousers.Plugins.BurnDownPlugin
             var earliestDate = workItemRevisions.Min(wi => wi.LastModified).Date.AddDays(1);
             var latestDate = workItemRevisions.Max(wi => wi.LastModified).Date.AddDays(1);
             var numDays = latestDate.Subtract(earliestDate).TotalDays;
-            var numPeriods = (decimal) numDays/7; //FIXME constant
-            var halfWay = earliestDate.AddDays(numDays/2);
+            var numPeriods = (decimal)numDays / 7; //FIXME constant
+            var halfWay = earliestDate.AddDays(numDays / 2);
 
             var firstHalfWorkCompleted = CumulativeWorkCompleted(workItemRevisions.Where(wi => wi.LastModified <= halfWay));
             var totalWorkCompleted = CumulativeWorkCompleted(workItemRevisions);
-            var gradient = ((totalWorkCompleted/firstHalfWorkCompleted) - 1)/numPeriods;
+            var gradient = ((totalWorkCompleted / firstHalfWorkCompleted) - 1) / numPeriods;
 
             return gradient;
         }
@@ -121,38 +161,6 @@ namespace Trousers.Plugins.BurnDownPlugin
             return options;
         }
 
-        private object[] GenerateGraphData(IEnumerable<WorkItemEntity> workItemRevisions,
-                                           DateTime latestDate,
-                                           decimal projectedWorkGradient,
-                                           decimal projectedWorkCompletedGradient,
-                                           DateTime date)
-        {
-            var allWorkItemsToDate = workItemRevisions.Where(wi => wi.LastModified <= date);
-            var latestRevisions = LatestRevisions(allWorkItemsToDate).ToArray();
-
-            var cumulativeWork = CumulativeWork(latestRevisions);
-            var cumulativeWorkCompleted = CumulativeWorkCompleted(latestRevisions);
-
-            var axisLabel = date.ToShortDateString();
-            object[] dataPoint;
-
-            var numPeriodsBeyondLatest = (decimal) date.Subtract(latestDate).TotalDays/7; //FIXME constant
-            if (numPeriodsBeyondLatest <= 0)
-            {
-                dataPoint = new object[] { axisLabel, cumulativeWorkCompleted, cumulativeWork, cumulativeWorkCompleted, cumulativeWork };
-            }
-            else
-            {
-                // we're off in projection-land now...
-                var projectedWork = cumulativeWork + (cumulativeWork*projectedWorkGradient*numPeriodsBeyondLatest);
-                var projectededWorkCompleted = cumulativeWorkCompleted + (cumulativeWorkCompleted*projectedWorkCompletedGradient*numPeriodsBeyondLatest);
-
-                dataPoint = new object[] {axisLabel, null, null, projectededWorkCompleted, projectedWork};
-            }
-
-            return dataPoint;
-        }
-
         private decimal CumulativeWork(IEnumerable<WorkItemEntity> latestRevisions)
         {
             var result = TotalOriginalEffort(latestRevisions);
@@ -175,7 +183,7 @@ namespace Trousers.Plugins.BurnDownPlugin
                 .Select(OriginalEffort)
                 .Sum();
 
-            return (int) Math.Floor(totalEffort);
+            return (int)Math.Floor(totalEffort);
         }
 
         private decimal OriginalEffort(WorkItemEntity wi)

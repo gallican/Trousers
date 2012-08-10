@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BurnDownPlugin\BurnDown.cs" />
+    <Compile Include="BurnDownPlugin\DataPoint.cs" />
     <Compile Include="BurnDownPlugin\WorkItemExtensions.cs" />
     <Compile Include="PluginsModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
