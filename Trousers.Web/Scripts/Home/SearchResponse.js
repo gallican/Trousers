@@ -11,16 +11,16 @@
             html += '<table style="display: block;">';
             html += "<tbody>";
 
-            html += self.BuildHeaderRow(result.DisplayFields);
+            html += self.buildHeaderRow(result.DisplayFields);
             for (var k in result.WorkItems) {
                 var oddOrEven = (k % 2 === 0) ? "even" : "odd";
                 var workItem = result.WorkItems[k];
 
                 // first pass: display all the visible-by-default fields
-                html += self.BuildMainRow(result.DisplayFields, workItem, oddOrEven);
+                html += self.buildMainRow(result.DisplayFields, workItem, oddOrEven);
 
                 // second pass: display all the other fields
-                html += self.BuildDetailRow(result.DisplayFields, result.LongFields, detailsDisplay, workItem, oddOrEven);
+                html += self.buildDetailRow(result.DisplayFields, result.LongFields, detailsDisplay, workItem, oddOrEven);
             }
             html += "</tbody>";
             html += "</table>";
@@ -30,17 +30,17 @@
         },
 
         onMainRowClick: function(event) {
-            ToggleDetailsDisplay($(event.target).closest(".mainRow"));
+            toggleDetailsDisplay($(event.target).closest(".mainRow"));
             event.stopPropagation();
             return false;
         },
 
-        ToggleDetailsDisplay: function(jMainRow) {
+        toggleDetailsDisplay: function(jMainRow) {
             var jDetailRow = jMainRow.next(".detailRow");
             jDetailRow.toggle();
         },
 
-        BuildHeaderRow: function(displayFields) {
+        buildHeaderRow: function(displayFields) {
 
             var tr = "<tr>";
             for (var wiHeaderKey in displayFields) {
@@ -52,7 +52,7 @@
             return tr;
         },
 
-        BuildMainRow: function(displayFields, workItem, oddOrEven) {
+        buildMainRow: function(displayFields, workItem, oddOrEven) {
             var tr = '<tr class="mainRow ' + oddOrEven + '" WorkItemId="' + workItem.ID + '">';
 
             for (var l = 0; l < displayFields.length; l++) {
@@ -72,7 +72,7 @@
             return value;
         },
 
-        BuildDetailRow: function(displayFields, longFields, detailsDisplay, workItem, oddOrEven) {
+        buildDetailRow: function(displayFields, longFields, detailsDisplay, workItem, oddOrEven) {
             // begin containing cell and row
             var tr = '<tr class="detailRow ' + oddOrEven + '" style="display: ' + detailsDisplay + ';">';
             tr += '<td colspan=' + displayFields.length + '>';
@@ -81,8 +81,8 @@
             tr += '<table>';
             tr += '<tr>';
 
-            tr += self.BuildDetailCell(displayFields, longFields, workItem);
-            tr += self.BuildAttachmentsCell(workItem);
+            tr += self.buildDetailCell(displayFields, longFields, workItem);
+            tr += self.buildAttachmentsCell(workItem);
 
             // end containing table
             tr += '</tr>';
@@ -95,7 +95,7 @@
             return tr;
         },
 
-        BuildDetailCell: function(displayFields, longFields, workItem) {
+        buildDetailCell: function(displayFields, longFields, workItem) {
 
             var td = '<td>';
             td += '<table style="display: block; margin: 10px; border: 1px solid #cccccc;">';
@@ -141,7 +141,7 @@
             return td;
         },
 
-        BuildAttachmentsCell: function(workItem) {
+        buildAttachmentsCell: function(workItem) {
             var td = '<td style="width: 320px;">';
             td += '<div class="Attachments" Populated="false"></div>';
             td += '</td>';
