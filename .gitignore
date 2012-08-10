@@ -6,3 +6,5 @@ obj
 TestResults
 *.suo
 *.user
+
+packages
