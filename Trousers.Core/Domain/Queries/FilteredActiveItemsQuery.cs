@@ -12,7 +12,7 @@ namespace Trousers.Core.Domain.Queries
         public override IQueryable<WorkItemEntity> Execute(IQueryable<WorkItemEntity> source)
         {
             var filtered = base.Execute(source);
-            var result = filtered.Where(item => item.IsCurrent);
+            var result = filtered.Where(item => item.IsCurrent);    //FIXME this could be stale.
             return result;
         }
     }

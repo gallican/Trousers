@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
+using System.Text;
 using Trousers.Core.Domain.Entities;
 using Trousers.Core.Extensions;
 
@@ -32,12 +32,37 @@ namespace Trousers.Core.Domain.Queries
 
         private static IEnumerable<string> Tokens(string search)
         {
-            var splitter = RegexFactory.FetchCompiledRegex(_tokenSplitRegex);
+            var tokens = new List<string>();
+            var quoted = false;
 
-            return splitter.Matches(search.ToLowerInvariant())
-                .Cast<Match>()
-                .Where(token => token.Value.Trim(' ', '"') != string.Empty)
-                .Select(token => token.Value.Trim(' ', '"'));
+            var sb = new StringBuilder();
+            foreach (var c in search)
+            {
+                switch (c)
+                {
+                    case '"':
+                        quoted = !quoted;
+                        break;
+                    case ' ':
+                        if (quoted)
+                        {
+                            sb.Append(c);
+                        }
+                        else
+                        {
+                            tokens.Add(sb.ToString());
+                            sb = new StringBuilder();
+                        }
+                        break;
+                    default:
+                        sb.Append(c);
+                        break;
+                }
+            }
+
+            tokens.Add(sb.ToString());
+
+            return tokens.Where(t => !string.IsNullOrWhiteSpace(t));
         }
 
         private static bool TokensMatch(WorkItemEntity wi, IEnumerable<string> tokens)
