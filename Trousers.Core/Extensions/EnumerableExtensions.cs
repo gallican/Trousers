@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Trousers.Core.Domain.Entities;
 
 namespace Trousers.Core.Extensions
 {
@@ -41,6 +42,17 @@ namespace Trousers.Core.Extensions
                 yield return current;
                 current = increment(current);
             }
+        }
+
+        public static IEnumerable<WorkItemEntity> LatestRevisions(this IEnumerable<WorkItemEntity> workItems)
+        {
+            var latestRevisionOfEachWorkItem = workItems
+                .GroupBy(wi => wi.Id)
+                .Select(g => g.OrderByDescending(w => w.Revision).First())
+                .OrderBy(wi => wi.Id)
+                .ToArray()
+                ;
+            return latestRevisionOfEachWorkItem;
         }
     }
 }

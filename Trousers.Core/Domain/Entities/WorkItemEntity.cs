@@ -6,12 +6,11 @@ namespace Trousers.Core.Domain.Entities
 {
     [DebuggerDisplay("{Id} {Revision} {LastModified}")]
     [Serializable]
-    public class WorkItemEntity : IIdentifiable, IDeactivatable, IVersionable
+    public class WorkItemEntity : IIdentifiable, IVersionable
     {
-        private readonly int _id;
-        private readonly int _revision;
+        private readonly long _id;
+        private readonly long _revision;
         private readonly DateTime _lastModified;
-        private readonly bool _isCurrent;
         private readonly IDictionary<string, string> _fields;
 
         public WorkItemEntity(int id, int revision, DateTime lastModified, bool isCurrent, IDictionary<string, string> fields)
@@ -19,16 +18,15 @@ namespace Trousers.Core.Domain.Entities
             _id = id;
             _revision = revision;
             _lastModified = lastModified;
-            _isCurrent = isCurrent;
             _fields = fields;
         }
 
-        public int Id
+        public long Id
         {
             get { return _id; }
         }
 
-        public int Revision
+        public long Revision
         {
             get { return _revision; }
         }
@@ -38,11 +36,7 @@ namespace Trousers.Core.Domain.Entities
             get { return _lastModified; }
         }
 
-        public bool IsCurrent
-        {
-            get { return _isCurrent; }
-        }
-
+       
         public IDictionary<string, string> Fields
         {
             get { return _fields; }

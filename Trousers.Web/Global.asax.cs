@@ -17,7 +17,8 @@ namespace Trousers.Web
         {
             _container = IoC.LetThereBeIoC();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(_container));
-            DomainEvents.SetEventBroker(_container.Resolve<IEventBroker>());
+            DomainEvents.SetEventBrokerFactory(() => _container.Resolve<IEventBroker>());
+            DomainEvents.Raise(new ApplicationStartedEvent());
 
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);

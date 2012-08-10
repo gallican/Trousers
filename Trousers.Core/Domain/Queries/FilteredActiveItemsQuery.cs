@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Trousers.Core.Domain.Entities;
 
@@ -5,15 +6,18 @@ namespace Trousers.Core.Domain.Queries
 {
     public class FilteredActiveItemsQuery : FilterExpressionQuery
     {
-        public FilteredActiveItemsQuery(string expr) : base(expr)
+        private readonly IDictionary<long, long> _activeWorkItemRevisions;
+
+        public FilteredActiveItemsQuery(string expr, IDictionary<long, long> activeWorkItemRevisions) : base(expr)
         {
+            _activeWorkItemRevisions = activeWorkItemRevisions;
         }
 
         public override IQueryable<WorkItemEntity> Execute(IQueryable<WorkItemEntity> source)
         {
-            var filtered = base.Execute(source);
-            var result = filtered.Where(item => item.IsCurrent);    //FIXME this could be stale.
-            return result;
+            var active = new AllCurrentItemsQuery<WorkItemEntity>(_activeWorkItemRevisions).Execute(source);
+            var filtered = base.Execute(active);
+            return filtered;
         }
     }
 }

@@ -1,17 +1,19 @@
-﻿namespace Trousers.Core.Domain.Events
+﻿using System;
+
+namespace Trousers.Core.Domain.Events
 {
     public static class DomainEvents
     {
-        private static IEventBroker _eventBroker;
+        private static Func<IEventBroker> _eventBrokerFunc;
 
-        public static void SetEventBroker(IEventBroker eventBroker)
+        public static void SetEventBrokerFactory(Func<IEventBroker> eventBrokerFunc)
         {
-            _eventBroker = eventBroker;
+            _eventBrokerFunc = eventBrokerFunc;
         }
 
         public static void Raise<T>(T domainEvent) where T : IDomainEvent
         {
-            _eventBroker.Raise(domainEvent);
+            _eventBrokerFunc().Raise(domainEvent);
         }
     }
 }

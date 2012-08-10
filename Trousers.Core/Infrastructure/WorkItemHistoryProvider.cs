@@ -2,9 +2,8 @@ using System.Linq;
 using Trousers.Core.Domain.Entities;
 using Trousers.Core.Domain.Queries;
 using Trousers.Core.Domain.Repositories;
-using Trousers.Core.Infrastructure;
 
-namespace Trousers.Core.DevelopmentStubs
+namespace Trousers.Core.Infrastructure
 {
     public class WorkItemHistoryProvider : IWorkItemHistoryProvider
     {

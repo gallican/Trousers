@@ -5,9 +5,9 @@ namespace Trousers.Core.Domain.Queries
 {
     public class AllRevisionsByIdQuery<T> : Query<T> where T : class, IIdentifiable
     {
-        private readonly int _id;
+        private readonly long _id;
 
-        public AllRevisionsByIdQuery(int id)
+        public AllRevisionsByIdQuery(long id)
         {
             _id = id;
         }

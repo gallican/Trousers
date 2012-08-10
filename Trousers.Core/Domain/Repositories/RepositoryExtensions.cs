@@ -11,7 +11,7 @@ namespace Trousers.Core.Domain.Repositories
             return repository.Query(new AllItemsQuery<T>());
         }
 
-        public static IQueryable<T> GetAllRevisionsById<T>(this IRepository<T> repository, int id) where T : class, IIdentifiable, IVersionable
+        public static IQueryable<T> GetAllRevisionsById<T>(this IRepository<T> repository, long id) where T : class, IIdentifiable, IVersionable
         {
             return repository.Query(new AllRevisionsByIdQuery<T>(id));
         }

@@ -11,7 +11,7 @@ namespace Trousers.Web
         {
             base.Load(builder);
 
-            builder.RegisterControllers(typeof(WebModule).Assembly);
+            builder.RegisterControllers(typeof (WebModule).Assembly);
 
             builder.RegisterType<HackyFileSettings>()
                 .AsImplementedInterfaces()

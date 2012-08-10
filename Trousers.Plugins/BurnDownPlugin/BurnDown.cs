@@ -64,7 +64,7 @@ namespace Trousers.Plugins.BurnDownPlugin
         private DataPoint GenerateActualData(IEnumerable<WorkItemEntity> workItemRevisions, DateTime date)
         {
             var allWorkItemsToDate = workItemRevisions.Where(wi => wi.LastModified <= date);
-            var latestRevisions = LatestRevisions(allWorkItemsToDate).ToArray();
+            var latestRevisions = allWorkItemsToDate.LatestRevisions().ToArray();
 
             var cumulativeWork = CumulativeWork(latestRevisions);
             var cumulativeWorkCompleted = CumulativeWorkCompleted(latestRevisions);
@@ -188,17 +188,6 @@ namespace Trousers.Plugins.BurnDownPlugin
             // ReSharper restore LoopCanBeConvertedToQuery
 
             return 0;
-        }
-
-        private static IEnumerable<WorkItemEntity> LatestRevisions(IEnumerable<WorkItemEntity> workItems)
-        {
-            var lastRevisionOfEachWorkItemThisPeriod = workItems
-                .GroupBy(wi => wi.Id)
-                .Select(g => g.OrderByDescending(w => w.Revision).First())
-                .OrderBy(wi => wi.Id)
-                .ToArray()
-                ;
-            return lastRevisionOfEachWorkItemThisPeriod;
         }
     }
 }

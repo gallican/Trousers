@@ -9,16 +9,18 @@ namespace Trousers.Core.Infrastructure
     {
         private readonly IRepository<WorkItemEntity> _repository;
         private readonly IFilterExpressionProvider _filterExpressionProvider;
+        private readonly CurrentWorkItemsProvider _currentWorkItemsProvider;
 
-        public WorkItemsProvider(IRepository<WorkItemEntity> repository, IFilterExpressionProvider filterExpressionProvider)
+        public WorkItemsProvider(IRepository<WorkItemEntity> repository, IFilterExpressionProvider filterExpressionProvider, CurrentWorkItemsProvider currentWorkItemsProvider)
         {
             _repository = repository;
             _filterExpressionProvider = filterExpressionProvider;
+            _currentWorkItemsProvider = currentWorkItemsProvider;
         }
 
         public IQueryable<WorkItemEntity> WorkItems
         {
-            get { return _repository.Query(new FilteredActiveItemsQuery(_filterExpressionProvider.FilterExpression)); }
+            get { return _repository.Query(new FilteredActiveItemsQuery(_filterExpressionProvider.FilterExpression, _currentWorkItemsProvider.ActiveWorkItemRevisions)); }
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Trousers.Core.DevelopmentStubs;
 using Trousers.Core.Domain.Repositories;
 using Trousers.Core.Infrastructure;
 
@@ -18,6 +17,11 @@ namespace Trousers.Core
             builder.RegisterType<WorkItemsProvider>()
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
+
+            builder.RegisterType<CurrentWorkItemsProvider>()
+                .AsImplementedInterfaces()
+                .AsSelf()
+                .SingleInstance();
 
             builder.RegisterGeneric(typeof(MemoryRepository<>))
                 .As(typeof(IRepository<>))
