@@ -33,6 +33,7 @@ namespace Trousers.Plugins.BurnDownPlugin
         public Response Query()
         {
             var workItemRevisions = _workItemHistoryProvider.WorkItemHistories.ToList();
+            if (workItemRevisions.None()) return new HtmlResponse("No data points. Sorry.");
 
             Func<DateTime, DateTime> increment = d => d.AddDays(7);
 

@@ -17,15 +17,32 @@
         doSearch: function() {
             $("#result").html("imma thinkin");
             var data = $("#form").serialize();
-            $.post("/Home/Search", data, self.onSuccess);
+
+            $.ajax({
+                type: 'POST',
+                url: "/Home/Search",
+                data: data,
+                success: self.onSuccess,
+                error: self.onError,
+            });
         },
 
-        onSuccess: function(response) {
+        onSuccess: function (response, textStatus, jqXHR) {
             $("#expr").focus();
-            if (response.SequenceNumber > self._sequenceNumber) {
-                self._sequenceNumber = response.SequenceNumber;
-                trousers.handleResponse(response, $("#result"));
+            if (response.IsJson) {
+                if (response.SequenceNumber > self._sequenceNumber) {
+                    self._sequenceNumber = response.SequenceNumber;
+                    trousers.handleResponse(response, $("#result"));
+                }
+                return;
             }
+
+            $("#result").html(response);
+        },
+
+        onError: function (response, textStatus, jqXHR) {
+            $("#expr").focus();
+            $("result").text(response);
         },
     };
 
