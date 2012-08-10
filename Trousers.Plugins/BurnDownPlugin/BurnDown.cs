@@ -21,35 +21,41 @@ namespace Trousers.Plugins.BurnDownPlugin
 
         private readonly IWorkItemHistoryProvider _workItemHistoryProvider;
         private readonly IRepository<WorkItemEntity> _repository;
+        private readonly AverageDeltaCalculator _averageDeltaCalculator;
 
-        public BurnDown(IWorkItemHistoryProvider workItemHistoryProvider, IRepository<WorkItemEntity> repository)
+        public BurnDown(IWorkItemHistoryProvider workItemHistoryProvider, IRepository<WorkItemEntity> repository, AverageDeltaCalculator averageDeltaCalculator)
         {
             _workItemHistoryProvider = workItemHistoryProvider;
             _repository = repository;
+            _averageDeltaCalculator = averageDeltaCalculator;
         }
 
         public Response Query()
         {
             var workItemRevisions = _workItemHistoryProvider.WorkItemHistories.ToList();
 
+            Func<DateTime, DateTime> increment = d => d.AddDays(7);
+
             var earliestDate = workItemRevisions.Min(wi => wi.LastModified).Date.AddDays(1);
             var latestDate = workItemRevisions.Max(wi => wi.LastModified).Date.AddDays(1);
             var totalDays = latestDate.Subtract(earliestDate).TotalDays;
-            var projectedDate = latestDate.AddDays(totalDays / 4);
+            var projectedDate = latestDate.AddDays(totalDays/4);
 
-            var dataPoints = EnumerableExtensions.Range(earliestDate, latestDate, d => d.AddDays(7))
+            var dataPoints = EnumerableExtensions.Range(earliestDate, latestDate, increment)
                 .AsParallel()
                 .AsOrdered()
                 .Select(date => GenerateActualData(workItemRevisions, date))
                 .ToList();
 
-            var projectedWorkCompletedGradient = ProjectedWorkCompletedGradient(workItemRevisions);
-            var projectedWorkGradient = ProjectedWorkGradient(workItemRevisions);
-            Extrapolate(dataPoints, projectedWorkGradient, projectedWorkCompletedGradient, projectedDate, d => d.AddDays(7));
+            var projectedWorkAverageDelta = _averageDeltaCalculator.Calculate(dataPoints.Select(dp => (decimal) dp.CumulativeWork));
+            var projectedWorkCompletedAverageDelta = _averageDeltaCalculator.Calculate(dataPoints.Select(dp => (decimal) dp.CumulativeWorkCompleted));
+
+            Extrapolate(dataPoints, projectedWorkAverageDelta, projectedWorkCompletedAverageDelta, projectedDate, increment);
 
             var data = new List<object[]>();
-            data.Add(new object[] { "Month", "Completed Work", "Total Work", "Completed Work (est)", "Total Work (est)" });
-            data.AddRange(dataPoints.Select(dp => new object[] { dp.Date.ToShortDateString(), dp.CumulativeWorkCompleted, dp.CumulativeWork, dp.ProjectedWorkCompleted, dp.ProjectedWork }));
+            data.Add(new object[] {"Month", "Completed Work", "Total Work", "Completed Work (est)", "Total Work (est)"});
+            data.AddRange(
+                dataPoints.Select(dp => new object[] {dp.Date.ToShortDateString(), dp.CumulativeWorkCompleted, dp.CumulativeWork, dp.ProjectedWorkCompleted, dp.ProjectedWork}));
             var options = BuildChartOptions();
             return new ChartResponse(data.ToArray(), options);
         }
@@ -62,19 +68,23 @@ namespace Trousers.Plugins.BurnDownPlugin
             var cumulativeWork = CumulativeWork(latestRevisions);
             var cumulativeWorkCompleted = CumulativeWorkCompleted(latestRevisions);
 
-            var dataPoint = new DataPoint { Date = date, CumulativeWorkCompleted = cumulativeWorkCompleted, CumulativeWork = cumulativeWork };
+            var dataPoint = new DataPoint {Date = date, CumulativeWorkCompleted = cumulativeWorkCompleted, CumulativeWork = cumulativeWork};
             return dataPoint;
         }
 
-        private static void Extrapolate(ICollection<DataPoint> dataPoints, decimal projectedWorkGradient, decimal projectedWorkCompletedGradient, DateTime projectedDate, Func<DateTime, DateTime> increment)
+        private static void Extrapolate(ICollection<DataPoint> dataPoints,
+                                        decimal projectedWorkAverageDelta,
+                                        decimal projectedWorkCompletedAverageDelta,
+                                        DateTime projectedDate,
+                                        Func<DateTime, DateTime> increment)
         {
             var lastActualDataPoint = dataPoints.OrderByDescending(dp => dp.Date).First();
 
             var projectionPeriod = 0;
             for (var date = lastActualDataPoint.Date; date <= projectedDate; date = increment(date))
             {
-                var projectedWork = lastActualDataPoint.CumulativeWork + (lastActualDataPoint.CumulativeWork * (projectedWorkGradient * projectionPeriod));
-                var projectedWorkCompleted = lastActualDataPoint.CumulativeWorkCompleted + (lastActualDataPoint.CumulativeWorkCompleted * (projectedWorkCompletedGradient * projectionPeriod));
+                var projectedWork = lastActualDataPoint.CumulativeWork + (projectedWorkAverageDelta*projectionPeriod);
+                var projectedWorkCompleted = lastActualDataPoint.CumulativeWorkCompleted + (projectedWorkCompletedAverageDelta*projectionPeriod);
 
                 var dataPoint = dataPoints
                     .Where(dp => dp.Date == date)
@@ -87,44 +97,12 @@ namespace Trousers.Plugins.BurnDownPlugin
                 }
                 else
                 {
-                    dataPoint = new DataPoint { Date = date, ProjectedWork = projectedWork, ProjectedWorkCompleted = projectedWorkCompleted };
+                    dataPoint = new DataPoint {Date = date, ProjectedWork = projectedWork, ProjectedWorkCompleted = projectedWorkCompleted};
                     dataPoints.Add(dataPoint);
                 }
 
                 projectionPeriod++;
             }
-        }
-
-        private decimal ProjectedWorkGradient(List<WorkItemEntity> workItemRevisions)
-        {
-            //FIXME really hacky way to calculate a gradient. replace with proper line of best fit.  -andrewh 7/8/2012
-            var earliestDate = workItemRevisions.Min(wi => wi.LastModified).Date.AddDays(1);
-            var latestDate = workItemRevisions.Max(wi => wi.LastModified).Date.AddDays(1);
-            var numDays = latestDate.Subtract(earliestDate).TotalDays;
-            var numPeriods = (decimal)numDays / 7; //FIXME constant
-            var halfWay = earliestDate.AddDays(numDays / 2);
-
-            var firstHalfWork = CumulativeWork(workItemRevisions.Where(wi => wi.LastModified <= halfWay));
-            var totalWork = CumulativeWork(workItemRevisions);
-            var gradient = ((totalWork / firstHalfWork) - 1) / numPeriods;
-
-            return gradient;
-        }
-
-        private decimal ProjectedWorkCompletedGradient(List<WorkItemEntity> workItemRevisions)
-        {
-            //FIXME really hacky way to calculate a gradient. replace with proper line of best fit.  -andrewh 7/8/2012
-            var earliestDate = workItemRevisions.Min(wi => wi.LastModified).Date.AddDays(1);
-            var latestDate = workItemRevisions.Max(wi => wi.LastModified).Date.AddDays(1);
-            var numDays = latestDate.Subtract(earliestDate).TotalDays;
-            var numPeriods = (decimal)numDays / 7; //FIXME constant
-            var halfWay = earliestDate.AddDays(numDays / 2);
-
-            var firstHalfWorkCompleted = CumulativeWorkCompleted(workItemRevisions.Where(wi => wi.LastModified <= halfWay));
-            var totalWorkCompleted = CumulativeWorkCompleted(workItemRevisions);
-            var gradient = ((totalWorkCompleted / firstHalfWorkCompleted) - 1) / numPeriods;
-
-            return gradient;
         }
 
         private static object BuildChartOptions()
@@ -183,7 +161,7 @@ namespace Trousers.Plugins.BurnDownPlugin
                 .Select(OriginalEffort)
                 .Sum();
 
-            return (int)Math.Floor(totalEffort);
+            return (int) Math.Floor(totalEffort);
         }
 
         private decimal OriginalEffort(WorkItemEntity wi)

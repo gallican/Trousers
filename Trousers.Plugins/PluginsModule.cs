@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Autofac;
 using Trousers.Core.Infrastructure;
+using Trousers.Plugins.BurnDownPlugin;
 using Trousers.Plugins.SearchPlugin;
 
 namespace Trousers.Plugins
@@ -15,6 +16,9 @@ namespace Trousers.Plugins
 
             builder.RegisterType<SearchDisplayMetadataProvider>()
                 .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<AverageDeltaCalculator>()
                 .SingleInstance();
         }
 

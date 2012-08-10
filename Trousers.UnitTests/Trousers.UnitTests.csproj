@@ -9,10 +9,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Trousers.UnitTests</RootNamespace>
     <AssemblyName>Trousers.UnitTests</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -41,8 +42,12 @@
     <Reference Include="NSubstitute">
       <HintPath>..\packages\NSubstitute.1.4.2.0\lib\NET40\NSubstitute.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework, Version=2.6.0.12051, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.2.6.0.12054\lib\nunit.framework.dll</HintPath>
+    <Reference Include="nunit.framework, Version=2.6.1.12217, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NUnit.2.6.1\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Shouldly">
+      <HintPath>..\packages\Shouldly.1.1.1.1\lib\35\Shouldly.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -51,18 +56,27 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="UniMock.Core">
-      <HintPath>..\packages\UniMock.Core.1.1.0.4\lib\net40\UniMock.Core.dll</HintPath>
+    <Reference Include="UniMock.Core, Version=1.2.0.6, Culture=neutral, PublicKeyToken=792d774958d966cc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\UniMock.Core.1.2.0.6\lib\net40\UniMock.Core.dll</HintPath>
     </Reference>
-    <Reference Include="UniMock.WithNSubstitute">
-      <HintPath>..\packages\UniMock.WithNSubstitute.1.2.0.5\lib\net40\UniMock.WithNSubstitute.dll</HintPath>
+    <Reference Include="UniMock.WithNSubstitute, Version=1.2.0.6, Culture=neutral, PublicKeyToken=792d774958d966cc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\UniMock.WithNSubstitute.1.2.0.6\lib\net40\UniMock.WithNSubstitute.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WhenCalculatingTheAverageDeltaForASimpleSeries.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Trousers.Plugins\Trousers.Plugins.csproj">
+      <Project>{197F6686-EE10-4EF8-B8E3-F39E4D350614}</Project>
+      <Name>Trousers.Plugins</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="LICENCE.txt" />
